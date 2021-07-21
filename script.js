@@ -2284,6 +2284,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_js_modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! /src/js/modules/videoPlayer */ "./src/js/modules/videoPlayer.js");
 /* harmony import */ var _src_js_modules_difference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! /src/js/modules/difference */ "./src/js/modules/difference.js");
 /* harmony import */ var _src_js_modules_form__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! /src/js/modules/form */ "./src/js/modules/form.js");
+/* harmony import */ var _src_js_modules_accordion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! /src/js/modules/accordion */ "./src/js/modules/accordion.js");
+
 
 
 
@@ -2346,7 +2348,60 @@ window.addEventListener('DOMContentLoaded', () => {
     form: '.schedule__form form',
     path: 'assets/question.php'
   }).init();
+  new _src_js_modules_accordion__WEBPACK_IMPORTED_MODULE_5__["default"]({
+    triggers: '.module__info-show .plus',
+    blocks: '.msg'
+  }).init();
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/accordion.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/accordion.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Accordion; });
+class Accordion {
+  constructor({
+    triggers,
+    blocks
+  }) {
+    this.triggers = document.querySelectorAll(triggers);
+    this.blocks = document.querySelectorAll(blocks);
+  }
+
+  bindTrigger() {
+    this.triggers.forEach((trgr, i) => {
+      trgr.addEventListener('click', () => {
+        this.blocks.forEach((block, k) => {
+          if (i == k) {
+            if (block.style.display == 'block') {
+              block.classList.add('animated', 'fadeOut');
+              setTimeout(() => {
+                block.classList.remove('animated', 'fadeOut');
+                block.style.display = 'none';
+              }, 600);
+            } else {
+              block.classList.add('animated', 'fadeIn');
+              block.style.display = 'block';
+              setTimeout(() => block.classList.remove('animated', 'fadeIn'), 600);
+            }
+          }
+        });
+      });
+    });
+  }
+
+  init() {
+    this.bindTrigger();
+  }
+
+}
 
 /***/ }),
 
