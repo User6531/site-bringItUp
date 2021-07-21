@@ -2285,6 +2285,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_js_modules_difference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! /src/js/modules/difference */ "./src/js/modules/difference.js");
 /* harmony import */ var _src_js_modules_form__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! /src/js/modules/form */ "./src/js/modules/form.js");
 /* harmony import */ var _src_js_modules_accordion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! /src/js/modules/accordion */ "./src/js/modules/accordion.js");
+/* harmony import */ var _src_js_modules_download__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! /src/js/modules/download */ "./src/js/modules/download.js");
+
 
 
 
@@ -2351,6 +2353,10 @@ window.addEventListener('DOMContentLoaded', () => {
   new _src_js_modules_accordion__WEBPACK_IMPORTED_MODULE_5__["default"]({
     triggers: '.module__info-show .plus',
     blocks: '.msg'
+  }).init();
+  new _src_js_modules_download__WEBPACK_IMPORTED_MODULE_6__["default"]({
+    triggers: '.download',
+    path: 'assets/img/Bitmap.jpg'
   }).init();
 });
 
@@ -2457,6 +2463,52 @@ class Difference {
       this.hideTabs();
       this.bindTrigger();
     } catch (error) {}
+  }
+
+}
+
+/***/ }),
+
+/***/ "./src/js/modules/download.js":
+/*!************************************!*\
+  !*** ./src/js/modules/download.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Download; });
+class Download {
+  constructor({
+    triggers,
+    path
+  }) {
+    this.triggers = document.querySelectorAll(triggers);
+    this.path = path;
+  }
+
+  downloadFile() {
+    const file = document.createElement('a');
+    file.setAttribute('href', this.path);
+    file.setAttribute('download', 'nice_picture');
+    document.body.append(file);
+    file.style.display = 'none';
+    file.click();
+    file.remove();
+  }
+
+  bindTrigger() {
+    this.triggers.forEach(trgr => {
+      trgr.style.cursor = 'pointer';
+      trgr.addEventListener('click', () => {
+        this.downloadFile();
+      });
+    });
+  }
+
+  init() {
+    this.bindTrigger();
   }
 
 }
