@@ -2290,18 +2290,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.addEventListener('DOMContentLoaded', () => {
-  new _src_js_modules_sliders_sliderMain__WEBPACK_IMPORTED_MODULE_0__["default"]({
+  const mainSliderPageOne = new _src_js_modules_sliders_sliderMain__WEBPACK_IMPORTED_MODULE_0__["default"]({
     container: '.page',
-    btns: '.next'
+    next: '.next'
   }).render();
-  const showUpSlider = new _modules_sliders_sliderMini__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  const mainSliderPageTwo = new _src_js_modules_sliders_sliderMain__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    container: '.moduleapp',
+    next: '.next',
+    prev: '.prev'
+  }).render();
+  const showUpSliderPageOne = new _modules_sliders_sliderMini__WEBPACK_IMPORTED_MODULE_1__["default"]({
     container: '.showup__content-slider',
     prev: '.showup__prev',
     next: '.showup__next',
     activeClass: '.card-active',
     animate: true
   }).init();
-  const moduleSlider = new _modules_sliders_sliderMini__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  const moduleSliderPageOne = new _modules_sliders_sliderMini__WEBPACK_IMPORTED_MODULE_1__["default"]({
     container: '.modules__content-slider',
     prev: '.modules__info-btns .slick-prev',
     next: '.modules__info-btns .slick-next',
@@ -2309,14 +2314,18 @@ window.addEventListener('DOMContentLoaded', () => {
     animate: true,
     autoplay: true
   }).init();
-  const feedSlider = new _modules_sliders_sliderMini__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  const feedSliderPageOne = new _modules_sliders_sliderMini__WEBPACK_IMPORTED_MODULE_1__["default"]({
     container: '.feed__slider',
     prev: '.feed .slick-prev',
     next: '.feed .slick-next',
     activeClass: '.feed__item-active'
   }).init();
-  new _src_js_modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__["default"]({
-    trigger: '.play__circle',
+  const mainPageOne = new _src_js_modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__["default"]({
+    trigger: '.showup__video .play',
+    popup: '.overlay'
+  }).init();
+  const mainPageTwo = new _src_js_modules_videoPlayer__WEBPACK_IMPORTED_MODULE_2__["default"]({
+    trigger: '.module__video-item .play',
     popup: '.overlay'
   }).init();
   const differenceOld = new _src_js_modules_difference__WEBPACK_IMPORTED_MODULE_3__["default"]({
@@ -2357,10 +2366,12 @@ class Difference {
     items,
     trigger
   }) {
-    this.column = document.querySelector(column);
-    this.items = this.column.querySelectorAll(items);
-    this.trigger = this.column.querySelector(trigger);
-    this.counter = 0;
+    try {
+      this.column = document.querySelector(column);
+      this.items = this.column.querySelectorAll(items);
+      this.trigger = this.column.querySelector(trigger);
+      this.counter = 0;
+    } catch (error) {}
   }
 
   hideTabs() {
@@ -2387,8 +2398,10 @@ class Difference {
   }
 
   init() {
-    this.hideTabs();
-    this.bindTrigger();
+    try {
+      this.hideTabs();
+      this.bindTrigger();
+    } catch (error) {}
   }
 
 }
@@ -2413,16 +2426,18 @@ class Form {
     form,
     path
   }) {
-    this.form = document.querySelector(form);
-    this.email = this.form.querySelector('input[name="email"]');
-    this.statusMessage = {
-      loading: 'https://acegif.com/wp-content/uploads/loading-25.gif',
-      successful: 'https://icons.veryicon.com/png/o/miscellaneous/cloud-call-center/success-24.png',
-      error: 'https://free-png.ru/wp-content/uploads/2021/06/free-png.ru-38-450x450.png'
-    };
-    this.inputs = this.form.querySelectorAll('input');
-    this.select = this.form.querySelector('select');
-    this.path = path;
+    try {
+      this.form = document.querySelector(form);
+      this.email = this.form.querySelector('input[name="email"]');
+      this.statusMessage = {
+        loading: 'https://acegif.com/wp-content/uploads/loading-25.gif',
+        successful: 'https://img.icons8.com/emoji/452/check-mark-emoji.png',
+        error: 'https://free-png.ru/wp-content/uploads/2021/06/free-png.ru-38-450x450.png'
+      };
+      this.inputs = this.form.querySelectorAll('input');
+      this.select = this.form.querySelector('select');
+      this.path = path;
+    } catch (error) {}
   }
 
   clearFormsValue() {
@@ -2532,9 +2547,11 @@ class Form {
   }
 
   init() {
-    this.initMask();
-    this.checkEmailvalue();
-    this.bindForm();
+    try {
+      this.initMask();
+      this.checkEmailvalue();
+      this.bindForm();
+    } catch (error) {}
   }
 
 }
@@ -2554,7 +2571,6 @@ __webpack_require__.r(__webpack_exports__);
 class Slider {
   constructor({
     container = null,
-    btns = null,
     prev = null,
     next = null,
     activeClass = '',
@@ -2562,10 +2578,13 @@ class Slider {
     animate = false
   } = {}) {
     this.container = document.querySelector(container);
-    this.slides = this.container.children;
-    this.btns = document.querySelectorAll(btns);
-    this.prev = document.querySelector(prev);
-    this.next = document.querySelector(next);
+
+    try {
+      this.slides = this.container.children;
+    } catch (e) {}
+
+    this.prev = document.querySelectorAll(prev);
+    this.next = document.querySelectorAll(next);
     this.slideIndex = 1;
     this.activeClass = activeClass;
     this.autoplay = autoplay;
@@ -2592,8 +2611,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class SliderMain extends _src_js_modules_sliders_slider__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor(container, btns) {
-    super(container, btns);
+  constructor(container, prev, next) {
+    super(container, prev, next);
   }
 
   hideSlides() {
@@ -2630,27 +2649,39 @@ class SliderMain extends _src_js_modules_sliders_slider__WEBPACK_IMPORTED_MODULE
     this.slides[this.slideIndex - 1].style.display = 'block';
   }
 
-  plusSlide() {
-    this.showSlides(this.slideIndex += 1);
+  plusSlide(n) {
+    this.showSlides(this.slideIndex += n);
   }
 
-  render() {
-    try {
-      this.johnSmith = document.querySelector('.hanson');
-    } catch (e) {}
-
+  bindTriggers() {
     this.showSlides(this.slideIndex); // init
 
-    this.btns.forEach(btn => {
+    this.next.forEach(btn => {
       btn.addEventListener('click', e => {
         e.preventDefault();
-        this.plusSlide();
+        this.plusSlide(1);
       });
       btn.parentNode.previousElementSibling.addEventListener('click', e => {
         e.preventDefault();
         this.showSlides(this.slideIndex = 1);
       });
     });
+    this.prev.forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        this.plusSlide(-1);
+      });
+    });
+  }
+
+  render() {
+    try {
+      try {
+        this.johnSmith = document.querySelector('.hanson');
+      } catch (e) {}
+
+      this.bindTriggers();
+    } catch (e) {}
   }
 
 }
@@ -2709,10 +2740,10 @@ class SliderMini extends _slider__WEBPACK_IMPORTED_MODULE_2__["default"] {
 
   sliderInterval() {
     let interval = setInterval(() => this.nextSlide(), 5000);
-    this.next.addEventListener('mouseenter', () => {
+    this.next[0].addEventListener('mouseenter', () => {
       clearInterval(interval);
     });
-    this.prev.addEventListener('mouseenter', () => {
+    this.prev[0].addEventListener('mouseenter', () => {
       clearInterval(interval);
     });
     [...this.slides].forEach(slide => {
@@ -2720,10 +2751,10 @@ class SliderMini extends _slider__WEBPACK_IMPORTED_MODULE_2__["default"] {
         clearInterval(interval);
       });
     });
-    this.next.addEventListener('mouseleave', () => {
+    this.next[0].addEventListener('mouseleave', () => {
       interval = setInterval(() => this.nextSlide(), 5000);
     });
-    this.prev.addEventListener('mouseleave', () => {
+    this.prev[0].addEventListener('mouseleave', () => {
       interval = setInterval(() => this.nextSlide(), 5000);
     });
     [...this.slides].forEach(slide => {
@@ -2734,26 +2765,28 @@ class SliderMini extends _slider__WEBPACK_IMPORTED_MODULE_2__["default"] {
   }
 
   init() {
-    this.prev.addEventListener('click', () => this.nextSlide());
-    this.next.addEventListener('click', () => this.prevSlide());
-    [...this.slides].forEach(slide => {
-      slide.querySelectorAll('.card__controls-arrow').forEach(item => {
-        item.addEventListener('click', e => {
-          e.preventDefault();
-          this.nextSlide();
+    try {
+      this.prev[0].addEventListener('click', () => this.nextSlide());
+      this.next[0].addEventListener('click', () => this.prevSlide());
+      [...this.slides].forEach(slide => {
+        slide.querySelectorAll('.card__controls-arrow').forEach(item => {
+          item.addEventListener('click', e => {
+            e.preventDefault();
+            this.nextSlide();
+          });
         });
       });
-    });
-    this.container.style.cssText = `
-            display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-        `;
-    this.changeActiveClass();
+      this.container.style.cssText = `
+                display: flex;
+                flex-wrap: wrap;
+                overflow: hidden;
+            `;
+      this.changeActiveClass();
 
-    if (this.autoplay) {
-      this.sliderInterval();
-    }
+      if (this.autoplay) {
+        this.sliderInterval();
+      }
+    } catch (error) {}
   }
 
 }
@@ -2777,19 +2810,48 @@ class VideoPlayer {
   }) {
     this.triggers = document.querySelectorAll(trigger);
     this.popup = document.querySelector(popup);
+    this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
   }
 
   openPopup() {
     this.triggers.forEach(trgr => {
       trgr.addEventListener('click', () => {
+        this.btn = trgr;
+
         if (document.querySelector('iframe#frame')) {
           this.popup.style.display = 'flex';
+
+          if (this.videoPath !== trgr.dataset.url) {
+            this.videoPath = trgr.dataset.url;
+            this.player.loadVideoById({
+              videoId: this.videoPath
+            });
+          }
         } else {
-          const videoPath = trgr.parentNode.dataset.url;
-          this.createPlayer(videoPath);
+          this.videoPath = trgr.dataset.url;
+          this.createPlayer(this.videoPath);
         }
       });
     });
+  }
+
+  onPlayerStateChange(state) {
+    const lockedVideo = this.btn.parentNode.nextElementSibling;
+    const svg = this.btn.querySelector('svg').cloneNode(true);
+    const playCircle = lockedVideo.querySelector('.play__circle'); // if (state.data === 0) { => to the end video
+
+    if (parseInt(this.player.getCurrentTime()) > 1000) {
+      lockedVideo.querySelector('svg').remove();
+      playCircle.append(svg);
+      playCircle.classList.remove('closed');
+      playCircle.nextElementSibling.classList.remove('attention');
+      playCircle.nextElementSibling.innerHTML = 'play video';
+      lockedVideo.style.cssText = `
+                opacity: 1;
+                -webkit-filter: grayscale(0);
+                filter: grayscale(0);
+            `;
+    }
   }
 
   closePopup() {
@@ -2798,7 +2860,10 @@ class VideoPlayer {
 
       if (target && target == this.popup || target && target.matches('.close')) {
         this.popup.style.display = 'none';
-        this.player.pauseVideo();
+
+        try {
+          this.player.pauseVideo();
+        } catch (error) {}
       }
     });
   }
@@ -2807,9 +2872,11 @@ class VideoPlayer {
     this.player = new YT.Player('frame', {
       height: '100%',
       width: '100%',
-      videoId: url
+      videoId: url,
+      events: {
+        'onStateChange': this.onPlayerStateChange
+      }
     });
-    console.log(this.player);
     this.popup.style.display = 'flex';
   }
 
