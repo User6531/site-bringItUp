@@ -2814,22 +2814,28 @@ class VideoPlayer {
   }
 
   openPopup() {
-    this.triggers.forEach(trgr => {
+    this.triggers.forEach((trgr, i) => {
+      if ((i + 1) % 2 == 0) {
+        trgr.setAttribute('data-closed', 'true');
+      }
+
       trgr.addEventListener('click', () => {
-        this.btn = trgr;
+        if (trgr.dataset.closed !== 'true') {
+          this.btn = trgr;
 
-        if (document.querySelector('iframe#frame')) {
-          this.popup.style.display = 'flex';
+          if (document.querySelector('iframe#frame')) {
+            this.popup.style.display = 'flex';
 
-          if (this.videoPath !== trgr.dataset.url) {
+            if (this.videoPath !== trgr.dataset.url) {
+              this.videoPath = trgr.dataset.url;
+              this.player.loadVideoById({
+                videoId: this.videoPath
+              });
+            }
+          } else {
             this.videoPath = trgr.dataset.url;
-            this.player.loadVideoById({
-              videoId: this.videoPath
-            });
+            this.createPlayer(this.videoPath);
           }
-        } else {
-          this.videoPath = trgr.dataset.url;
-          this.createPlayer(this.videoPath);
         }
       });
     });
@@ -2838,20 +2844,24 @@ class VideoPlayer {
   onPlayerStateChange(state) {
     const lockedVideo = this.btn.parentNode.nextElementSibling;
     const svg = this.btn.querySelector('svg').cloneNode(true);
-    const playCircle = lockedVideo.querySelector('.play__circle'); // if (state.data === 0) { => to the end video
 
-    if (parseInt(this.player.getCurrentTime()) > 1000) {
-      lockedVideo.querySelector('svg').remove();
-      playCircle.append(svg);
-      playCircle.classList.remove('closed');
-      playCircle.nextElementSibling.classList.remove('attention');
-      playCircle.nextElementSibling.innerHTML = 'play video';
-      lockedVideo.style.cssText = `
-                opacity: 1;
-                -webkit-filter: grayscale(0);
-                filter: grayscale(0);
-            `;
-    }
+    try {
+      const playCircle = lockedVideo.querySelector('.play__circle'); // if (state.data === 0) { => to the end 
+
+      if (parseInt(this.player.getCurrentTime()) > 1000) {
+        lockedVideo.querySelector('svg').remove();
+        playCircle.append(svg);
+        playCircle.classList.remove('closed');
+        playCircle.nextElementSibling.classList.remove('attention');
+        playCircle.nextElementSibling.innerHTML = 'play video';
+        lockedVideo.style.cssText = `
+                    opacity: 1;
+                    -webkit-filter: grayscale(0);
+                    filter: grayscale(0);
+                `;
+        playCircle.parentNode.setAttribute('data-closed', 'false');
+      }
+    } catch (error) {}
   }
 
   closePopup() {
